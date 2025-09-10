@@ -5,6 +5,10 @@
 import flet as ft
 from datetime import datetime
 
+def main(page: ft.Page):
+    # Page configuration
+    page.title = "Personal Information Manager"
+    page.window.width = 600
     page.window.height = 700
     page.padding = 20
     page.scroll = ft.ScrollMode.AUTO
