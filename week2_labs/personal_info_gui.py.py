@@ -1,3 +1,5 @@
+# Random
+
 # personal_info_gui.py
 # CCCS 106 - Week 2 Lab Exercise
 # Enhanced Personal Information with GUI
