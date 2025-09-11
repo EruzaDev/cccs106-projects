@@ -16,6 +16,9 @@ def main(page: ft.Page):
 
     page.bgcolor = ft.Colors.AMBER_ACCENT
 
+    page.theme_mode = ft.ThemeMode.LIGHT
+
+    
     page_title = ft.Text("User Login",
                          size=20,
                          text_align=ft.TextAlign.CENTER,
@@ -42,60 +45,94 @@ def main(page: ft.Page):
                             )
     
     async def login_click(e):
-        page.vertical_alignment = ft.MainAxisAlignment.END
-        success = ft.AlertDialog(
+        success_dialog = ft.AlertDialog(
             icon=ft.Icon(name=ft.Icons.CHECK_CIRCLE, color=ft.Colors.GREEN),
             modal=True,
             title = ft.Text("Login Successful", text_align=ft.TextAlign.CENTER),
-            content= ft.Text(f'Welcome, [username]'), # add username
+            content= ft.Text(f'Welcome, {user_name.value}'), # add username
             actions = [
                 ft.TextButton(
-                    text="OK", on_click = lambda e: page.close(success), 
+                    text="OK", on_click = lambda e: page.close(success_dialog), 
                 )
             ]
         )
         
-        failure = ft.AlertDialog(
+        failure_dialog = ft.AlertDialog(
             icon = ft.Icon(name=ft.Icons.ERROR, color=ft.Colors.RED),
             modal = True,
             title = ft.Text("Login Failed", text_align=ft.TextAlign.CENTER),
             content = ft.Text("Invalid username or password"),
             actions = [
                 ft.TextButton(
-                    text="OK", on_click = lambda e: page.close(failure), 
+                    text="OK", on_click = lambda e: page.close(failure_dialog), 
                 )
             ]
         )
 
-        invalid = ft.AlertDialog(
+        invalid_input_dialog = ft.AlertDialog(
             icon=ft.Icon(name=ft.Icons.INFO, color=ft.Colors.BLUE),
             modal = True,
             title = ft.Text("Input Error", text_align=ft.TextAlign.CENTER),
-            content = ft.Text("Please enter username of password"),
+            content = ft.Text("Please enter username or password"),
             actions = [
                 ft.TextButton(
-                    text = "OK", on_click = lambda e: page.close(invalid)
+                    text = "OK", on_click = lambda e: page.close(invalid_input_dialog)
                 )
             ]
         )
 
-        database_error  = ft.AlertDialog(
+        database_error_dialog  = ft.AlertDialog(
             modal = True,
             title = ft.Text("Database Error"),
             content = ft.Text("An error occured while connecting to the database"), 
             alignment = ft.alignment.center,
             actions = [ft.TextButton(
-                text="OK", on_click = lambda e: page.close(database_error)
+                text="OK", on_click = lambda e: page.close(database_error_dialog)
             )]
         )
 
-        
-        page.open(invalid)
+        if user_name.value and password.value:
+            try:
+                db = connect_db()
+                cursor = db.cursor()
 
+                query = "SELECT * FROM users WHERE username = %s AND password = %s"
+
+                cursor.execute(query, (user_name.value, password.value))
+
+                result = cursor.fetchone()
+
+                if result:
+                    page.open(success_dialog)
+                else:
+                    page.open(failure_dialog)
+                page.update()
+            except mysql.connector.Error:
+                page.open(database_error_dialog)
+            finally:
+                if cursor:
+                    cursor.close()
+                if db:
+                    db.close()
+        else:
+            page.open(invalid_input_dialog)
+    
     login_button = ft.ElevatedButton(text="Login", width=100, icon=ft.Icons.LOGIN,on_click=login_click)
 
-    page.add(page_title, user_name, password, login_button)
+    page.add(page_title, 
+            ft.Container(
+                content=ft.Column([user_name, password],
+                spacing = 20
+                )
+            ), 
+            ft.Container(
+                content = login_button,
+                margin = ft.Margin(0, 20, 40, 0),
+                alignment = ft.alignment.top_right
+            )
+        )
+    page.update()
 
     
 
-ft.app(main)
+ft.app(target=main)
