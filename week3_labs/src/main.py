@@ -31,6 +31,7 @@ def main(page: ft.Page):
                             helper_text="This is your unique identifier",
                             width=300,
                             autofocus=True,
+                            disabled=False,
                             icon=ft.Icon(name=ft.Icons.PERSON),
                             bgcolor=ft.Colors.LIGHT_BLUE_ACCENT
                             )
@@ -39,6 +40,7 @@ def main(page: ft.Page):
                             helper_text="This is your secret key",
                             width=300,
                             password=True,
+                            disabled = False,
                             can_reveal_password=True,
                             icon=ft.Icon(name=ft.Icons.PASSWORD),
                             bgcolor=ft.Colors.LIGHT_BLUE_ACCENT
