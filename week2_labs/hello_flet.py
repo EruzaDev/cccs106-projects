@@ -73,13 +73,18 @@ def main(page: ft.Page):
         
         # Create dialog
         dlg = ft.AlertDialog(
+            modal = True,
             title=ft.Text("Hello"),
             content=ft.Text(info_text),
             alignment=ft.alignment.center,
             title_padding=ft.padding.all(25),
+            actions = [
+                ft.TextButton('Close', on_click = lambda e : page.close(dlg))
+            ]
         )    
 
         page.open(dlg)
+        page.update()
     
     # Buttons with styling
     hello_button = ft.ElevatedButton(
