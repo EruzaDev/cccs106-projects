@@ -54,9 +54,24 @@ def add_contact(page, inputs, contacts_list_view, db_conn):
 
 def delete_contact(page, contact_id, db_conn, contacts_list_view):
     """Deletes a contact and refreshes the list."""
-    delete_contact_db(db_conn, contact_id)
-    display_contacts(page, contacts_list_view, db_conn)
 
+    def confirmed_delete(e):
+        delete_contact_db(db_conn, contact_id)
+        display_contacts(page, contacts_list_view, db_conn)
+        dialog.open = False
+        page.update()
+
+    dialog = ft.AlertDialog(
+        modal = True,
+        title = ft.Text("Confirm Deletion"),
+        content = ft.Text("Are you sure you want to delete this contact?"),
+        actions = [
+            ft.TextButton(text="Yes", on_click=confirmed_delete),
+            ft.TextButton(text="No", on_click=lambda e: page.close(dialog)),
+        ]
+    )
+
+    page.open(dialog)
 
 def open_edit_dialog(page, contact, db_conn, contacts_list_view):
     """Opens a dialog to edit a contact's details."""
