@@ -7,6 +7,7 @@ from app_logic import display_contacts, add_contact
 def main(page: ft.Page):
     page.title = "Contact Book"
     page.vertical_alignment = ft.MainAxisAlignment.START
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.window_width = 400
     page.window_height = 600
     page.theme_mode = ft.ThemeMode.LIGHT
@@ -37,7 +38,9 @@ def main(page: ft.Page):
                 ft.Divider(),
                 ft.Text("Contacts:", size=20, weight=ft.FontWeight.BOLD),
                 contacts_list_view,
-            ]
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER
         )
     )
 

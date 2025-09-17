@@ -21,14 +21,16 @@ def display_contacts(page, contacts_list_view, db_conn):
                             text="Edit",
                             icon=ft.Icons.EDIT,
                             on_click=lambda _, c=contact: open_edit_dialog(page, c,
-                                                                           db_conn, contacts_list_view)
+                                                                           db_conn,
+                                                                           contacts_list_view)
                         ),
                         ft.PopupMenuItem(),
                         ft.PopupMenuItem(
                             text="Delete",
                             icon=ft.Icons.DELETE,
                             on_click=lambda _, cid=contact_id: delete_contact(page,
-                                                                              cid, db_conn, contacts_list_view)
+                                                                              cid, db_conn,
+                                                                              contacts_list_view)
                         ),
                     ],
                 ),
