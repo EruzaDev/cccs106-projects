@@ -1,6 +1,7 @@
 # app_logic.py
 import flet as ft
 from database import update_contact_db, delete_contact_db, add_contact_db, get_all_contacts_db
+from utils import *
 
 def display_contacts(page, contacts_list_view, db_conn):
     """Fetches and displays all contacts in the ListView."""
@@ -40,10 +41,10 @@ def display_contacts(page, contacts_list_view, db_conn):
 def add_contact(page, inputs, contacts_list_view, db_conn):
     """Adds a new contact and refreshes the list."""
     name_input, phone_input, email_input = inputs
-    add_contact_db(db_conn, name_input.value, phone_input.value, email_input.value)
-
-    for field in inputs:
-        field.value = ""
+    if validate(name_input, phone_input, email_input, page):
+        add_contact_db(db_conn, name_input.value.strip().title(), phone_input.value, email_input.value)
+        for field in inputs:
+            field.value = ""
 
     display_contacts(page, contacts_list_view, db_conn)
     page.update()
