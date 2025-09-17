@@ -20,7 +20,7 @@ def add_contact_db(conn, name, phone, email):
     """Adds a new contact to the database."""
     cursor = conn.cursor()
     cursor.execute(
-        "INSERT INTO contacts (name, phone, email VALUE (?, ?, ?)",
+        "INSERT INTO contacts (name, phone, email) VALUES (?, ?, ?)",
         (name, phone, email)
     )
     conn.commit()
