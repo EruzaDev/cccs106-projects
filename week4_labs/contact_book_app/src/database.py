@@ -39,8 +39,17 @@ def update_contact_db(conn, contact_id, name, phone, email):
         (name, phone, email, contact_id)
     )
     conn.commit()
+
 def delete_contact_db(conn, contact_id):
     """Deletes a contact from the database."""
     cursor = conn.cursor()
     cursor.execute("DELETE FROM contacts WHERE id = ?", (contact_id,))
     conn.commit()
+
+def search_contacts(term):
+    conn = sqlite3.connect("contacts.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, name, phone, email FROM contacts WHERE name LIKE ?", (f"%{term}%",))
+    results = cursor.fetchall()
+    conn.close()
+    return results
