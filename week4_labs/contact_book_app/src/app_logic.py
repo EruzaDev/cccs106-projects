@@ -10,29 +10,42 @@ def update_list(page, contacts_list_view, db_conn, term):
         if contact:
             contact_id, name, phone, email = contact
             contacts_list_view.controls.append(
-                ft.ListTile(
-                    title=ft.Text(name),
-                    subtitle=ft.Text(f"Phone: {phone} | Email: {email}"),
-                    trailing=ft.PopupMenuButton(
-                        icon=ft.Icons.MORE_VERT,
-                        items=[
-                            ft.PopupMenuItem(
-                                text="Edit",
-                                icon=ft.Icons.EDIT,
-                                on_click=lambda _, c=contact: open_edit_dialog(page, c,
-                                                                               db_conn,
-                                                                               contacts_list_view)
-                            ),
-                            ft.PopupMenuItem(),
-                            ft.PopupMenuItem(
-                                text="Delete",
-                                icon=ft.Icons.DELETE,
-                                on_click=lambda _, cid=contact_id: delete_contact(page,
-                                                                                  cid, db_conn,
-                                                                                  contacts_list_view)
-                            ),
-                        ],
+                ft.Card(
+                    content=ft.Container(
+                        content=ft.Column(
+                            [
+                                ft.ListTile(
+                                    title=ft.Row([ft.Icon(ft.Icons.PERSON_2_OUTLINED), ft.Text(name)]),
+                                    subtitle=ft.Row(
+                                        [ft.Row([ft.Icon(ft.Icons.PHONE, size=15), ft.Text(f"Phone: {phone}")],
+                                                expand=True, wrap=True), ft.Text("|"),
+                                         ft.Row([ft.Icon(ft.Icons.EMAIL, size=15), ft.Text(f" Email: {email}")],
+                                                expand=True, wrap=True)], spacing=5),
+                                    trailing=ft.PopupMenuButton(
+                                        icon=ft.Icons.MORE_VERT,
+                                        items=[
+                                            ft.PopupMenuItem(
+                                                text="Edit",
+                                                icon=ft.Icons.EDIT,
+                                                on_click=lambda _, c=contact: open_edit_dialog(page, c,
+                                                                                               db_conn,
+                                                                                               contacts_list_view)
+                                            ),
+                                            ft.PopupMenuItem(),
+                                            ft.PopupMenuItem(
+                                                text="Delete",
+                                                icon=ft.Icons.DELETE,
+                                                on_click=lambda _, cid=contact_id: delete_contact(page,
+                                                                                                  cid, db_conn,
+                                                                                                  contacts_list_view)
+                                            ),
+                                        ],
+                                    ),
+                                )
+                            ]
+                        )
                     ),
+                    shape=ft.RoundedRectangleBorder(radius=5)
                 )
             )
         else:
@@ -59,8 +72,8 @@ def display_contacts(page, contacts_list_view, db_conn):
                     content=ft.Column(
                         [
                             ft.ListTile(
-                                title=ft.Text(name),
-                                subtitle=ft.Text(f"Phone: {phone} | Email: {email}"),
+                                title=ft.Row([ft.Icon(ft.Icons.PERSON_2_OUTLINED), ft.Text(name)]),
+                                subtitle=ft.Row([ft.Row([ft.Icon(ft.Icons.PHONE, size=15), ft.Text(f"Phone: {phone}")], expand=True, wrap=True), ft.Text("|"),ft.Row([ft.Icon(ft.Icons.EMAIL, size=15) ,ft.Text(f" Email: {email}")], expand=True, wrap=True)], spacing=5),
                                 trailing=ft.PopupMenuButton(
                                 icon=ft.Icons.MORE_VERT,
                                 items=[

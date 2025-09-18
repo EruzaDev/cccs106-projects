@@ -2,7 +2,7 @@
 import flet as ft
 from database import init_db
 from app_logic import display_contacts, add_contact, update_list
-from week4_labs.contact_book_app.src.utils import country_prefixes
+from utils import country_drop
 
 
 def main(page: ft.Page):
@@ -13,19 +13,12 @@ def main(page: ft.Page):
     page.window_height = 600
     page.theme_mode = ft.ThemeMode.LIGHT
 
+
     db_conn = init_db()
 
     name_input = ft.TextField(label="Name", width=350, icon=ft.Icons.PERSON_2_ROUNDED)
     phone_input = ft.TextField(label="Phone", width=170,hint_text="###-####-###", keyboard_type=ft.KeyboardType.NUMBER)
     email_input = ft.TextField(label="Email", width=350, keyboard_type=ft.KeyboardType.EMAIL, on_change= lambda e: email_domain(e.control.value), icon=ft.Icons.EMAIL)
-
-    country_drop = ft.DropdownM2(
-        label="Country",
-        options=[ft.dropdownm2.Option(c) for c in country_prefixes.keys()],
-        icon=ft.Icons.PHONE,
-        value="PHL (+63)",
-        width=170,
-    )
 
     inputs = (name_input, phone_input, email_input)
 
@@ -57,7 +50,7 @@ def main(page: ft.Page):
             expand = True,
             alignment=ft.MainAxisAlignment.CENTER,
             horizontal_alignment=ft.CrossAxisAlignment.CENTER
-        )
+        ),
     )
 
     def displaying_contacts(term):
@@ -67,10 +60,7 @@ def main(page: ft.Page):
             display_contacts(page, contacts_list_view, db_conn)
 
     def email_domain(term):
-        if "@" in term:
-            email_input.suffix_text = None
-        else:
-            email_input.suffix_text = "@gmail.com"
+        email_input.suffix = None if "@" in term else ft.Text("@gmail.com", color=ft.Colors.GREY)
         page.update()
 
     email_domain("")
