@@ -1,7 +1,7 @@
 import re
 import flet as ft
 
-EMAIL_PATTERN = re.compile(r"^[\w\.-]+@[\w\.-]+\.\w+$")
+EMAIL_PATTERN = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 
 country_prefixes = {
     "AFG (+93)": "+93",

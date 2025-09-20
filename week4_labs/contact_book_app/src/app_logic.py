@@ -107,7 +107,8 @@ def add_contact(page, inputs, contacts_list_view, db_conn, prefix_num):
     """Adds a new contact and refreshes the list."""
     name_input, phone_input, email_input = inputs
     if validate(name_input, phone_input, email_input, page):
-        email_input.value += "@gmail.com"
+        if "@" not in email_input.value:
+            email_input.value += "@gmail.com"
         phone_input.value = f"{country_prefixes[prefix_num.value]}{phone_input.value.lstrip('0')}"
         add_contact_db(db_conn, name_input.value.strip().title(), phone_input.value, email_input.value)
         for field in inputs:
