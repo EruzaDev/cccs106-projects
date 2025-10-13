@@ -9,13 +9,27 @@ def update_list(page, contacts_list_view, db_conn, term):
     for contact in search_contacts(term):
         if contact:
             contact_id, name, phone, email = contact
+            # avatar: circle with initial and deterministic color
+            initial = (name.strip()[0].upper() if name and name.strip() else "?")
+            bg = avatar_color(name)
+            avatar = ft.Container(
+                content=ft.Text(initial, color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD),
+                width=40,
+                height=40,
+                alignment=ft.alignment.center,
+                bgcolor=bg,
+                padding=0,
+                border_radius=ft.border_radius.all(999),
+            )
+
             contacts_list_view.controls.append(
                 ft.Card(
                     content=ft.Container(
                         content=ft.Column(
                             [
                                 ft.ListTile(
-                                    title=ft.Row([ft.Icon(ft.Icons.PERSON_2_OUTLINED), ft.Text(name)]),
+                                    leading=avatar,
+                                    title=ft.Text(name),
                                     subtitle=ft.Row(
                                         [ft.Row([ft.Icon(ft.Icons.PHONE, size=15), ft.Text(f"Phone: {phone}")],
                                                 expand=True, wrap=True), ft.Text("|"),
@@ -66,13 +80,27 @@ def display_contacts(page, contacts_list_view, db_conn):
     for contact in contacts:
         contact_id, name, phone, email = contact
 
+        # avatar for contact
+        initial = (name.strip()[0].upper() if name and name.strip() else "?")
+        bg = avatar_color(name)
+        avatar = ft.Container(
+            content=ft.Text(initial, color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD),
+            width=40,
+            height=40,
+            alignment=ft.alignment.center,
+            bgcolor=bg,
+            padding=0,
+            border_radius=ft.border_radius.all(999),
+        )
+
         contacts_list_view.controls.append(
             ft.Card(
                 content=ft.Container(
                     content=ft.Column(
                         [
                             ft.ListTile(
-                                title=ft.Row([ft.Icon(ft.Icons.PERSON_2_OUTLINED), ft.Text(name)]),
+                                leading=avatar,
+                                title=ft.Text(name),
                                 subtitle=ft.Row([ft.Row([ft.Icon(ft.Icons.PHONE, size=15), ft.Text(f"Phone: {phone}")], expand=True, wrap=True), ft.Text("|"),ft.Row([ft.Icon(ft.Icons.EMAIL, size=15) ,ft.Text(f" Email: {email}")], expand=True, wrap=True)], spacing=5),
                                 trailing=ft.PopupMenuButton(
                                 icon=ft.Icons.MORE_VERT,
@@ -107,7 +135,23 @@ def add_contact(page, inputs, contacts_list_view, db_conn, prefix_num):
     """Adds a new contact and refreshes the list."""
     name_input, phone_input, email_input = inputs
     if validate(name_input, phone_input, email_input, page):
-        email_input.value += "@gmail.com"
+        # Normalize and prepare email
+        raw_email = email_input.value.strip()
+
+        # If no '@' present, append default domain
+        if "@" not in raw_email:
+            raw_email = raw_email + "@gmail.com"
+
+        # Final validation: require a dot in domain and match regex
+        domain = raw_email.split("@", 1)[1] if "@" in raw_email else ""
+        if not domain or "." not in domain or not bool(EMAIL_PATTERN.match(raw_email)):
+            email_input.error_text = "Invalid email address (include a domain, e.g. user@gmail.com)"
+            page.update()
+            return
+
+        # assign normalized email back to the field
+        email_input.value = raw_email
+
         phone_input.value = f"{country_prefixes[prefix_num.value]}{phone_input.value.lstrip('0')}"
         add_contact_db(db_conn, name_input.value.strip().title(), phone_input.value, email_input.value)
         for field in inputs:

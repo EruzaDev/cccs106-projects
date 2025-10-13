@@ -263,7 +263,9 @@ def validate(name, phone, email, page):
     if email.value.strip() == "":
         email.error_text = "Email cannot be empty!"
     elif "@" in email.value:
-        if not bool(EMAIL_PATTERN.match(email.value.strip())):
+        domain = email.value.split("@", 1)[1]
+        # require a dot in the domain part (e.g. example.com)
+        if "." not in domain or not bool(EMAIL_PATTERN.match(email.value.strip())):
             email.error_text = "Invalid email address"
     else:
         email.error_text = None
@@ -272,5 +274,25 @@ def validate(name, phone, email, page):
         return True
     else:
         return False
+
+
+# Avatar color utilities - choose a deterministic color from a small palette
+# based on the contact name so the same person keeps the same color.
+AVATAR_COLORS = [
+    "#1abc9c",  # teal
+    "#e74c3c",  # red
+    "#3498db",  # blue
+    "#f1c40f",  # yellow
+    "#9b59b6",  # purple
+]
+
+
+def avatar_color(name: str) -> str:
+    """Return a hex color from AVATAR_COLORS deterministically based on name."""
+    if not name:
+        return "#95a5a6"  # gray fallback
+    # simple stable hash: sum of codepoints
+    s = sum(ord(c) for c in name.strip().lower())
+    return AVATAR_COLORS[s % len(AVATAR_COLORS)]
 
 
