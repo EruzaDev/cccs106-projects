@@ -31,10 +31,25 @@ def main(page: ft.Page):
         on_click=lambda e: add_contact(page, inputs, contacts_list_view, db_conn, country_drop)
     )
 
+    # modern theme toggle (top-right)
+    def on_toggle(e):
+        page.theme_mode = ft.ThemeMode.DARK if e.control.value else ft.ThemeMode.LIGHT
+        page.update()
+
+    theme_toggle = ft.Row(
+        [
+            ft.Icon(ft.Icons.DARK_MODE),
+            ft.Switch(value=(page.theme_mode == ft.ThemeMode.DARK), on_change=on_toggle),
+        ],
+        alignment=ft.MainAxisAlignment.END,
+        vertical_alignment=ft.CrossAxisAlignment.CENTER,
+        spacing=6,
+    )
+
     page.add(
         ft.Column(
             [
-                ft.Text("Enter Contact Details:", size=20, weight=ft.FontWeight.BOLD),
+                ft.Row([ft.Text("Enter Contact Details:", size=20, weight=ft.FontWeight.BOLD), theme_toggle], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                 name_input,
                 ft.Row([country_drop, phone_input],  alignment=ft.MainAxisAlignment.CENTER, wrap=True),
                 email_input,
