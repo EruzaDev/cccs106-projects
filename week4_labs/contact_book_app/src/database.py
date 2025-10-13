@@ -1,9 +1,13 @@
 import sqlite3
+import os
+
+# Store the database in the same directory as this module (src/)
+DB_PATH = os.path.join(os.path.dirname(__file__), "contacts.db")
 
 
 def init_db():
     """Initializes the database and creates the contacts table if it doesn't exist."""
-    conn = sqlite3.connect('contacts.db', check_same_thread=False)
+    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
     cursor = conn.cursor()
     cursor.execute(''' 
         CREATE TABLE IF NOT EXISTS contacts ( 
@@ -47,7 +51,7 @@ def delete_contact_db(conn, contact_id):
     conn.commit()
 
 def search_contacts(term):
-    conn = sqlite3.connect("contacts.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute("SELECT id, name, phone, email FROM contacts WHERE name LIKE ?", (f"%{term}%",))
     results = cursor.fetchall()
