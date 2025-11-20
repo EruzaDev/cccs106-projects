@@ -1,4 +1,3 @@
-git clone https://github.com/<username>/cccs106-projects.git
 # Weather Application - Module 6 Lab
 
 ## Student Information
