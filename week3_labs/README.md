@@ -1,81 +1,90 @@
-# Userlogin app
+# User Login System – Week 3 Lab
 
-## Run the app
+## Student Information
+- **Name**: C-jay Lavapie
+- **Student ID**: 221001254
+- **Course**: CCCS 106
+- **Section**: B
 
-### uv
+## Project Overview
+A simple user login system built with **Flet** and **MySQL**. Users can log in with credentials stored in a MySQL database. The app features a modern, frameless window design with success/failure dialogs.
 
-Run as a desktop app:
+## Features
+- User authentication against MySQL database
+- Frameless window with centered layout
+- Success and failure alert dialogs
+- Input validation (empty field check)
+- Database error handling
 
+## Project Structure
 ```
-uv run flet run
+week3_labs/
+├── src/
+│   ├── main.py          # Flet UI and login logic
+│   ├── db_connection.py # MySQL connection helper
+│   └── assets/          # App assets
+├── pyproject.toml       # Project configuration
+└── README.md
 ```
 
-Run as a web app:
+## Prerequisites
+- Python 3.8+
+- MySQL Server running locally
+- A database with a `users` table containing `username` and `password` columns
 
-```
-uv run flet run --web
-```
+## Installation
 
-### Poetry
+```powershell
+cd week3_labs
 
-Install dependencies from `pyproject.toml`:
+# Install dependencies (using pip or poetry)
+pip install flet mysql-connector-python
 
-```
+# Or with Poetry
 poetry install
 ```
 
-Run as a desktop app:
+## Database Setup
+Create a MySQL database and table:
 
+```sql
+CREATE DATABASE IF NOT EXISTS cccs106_db;
+USE cccs106_db;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+INSERT INTO users (username, password) VALUES ('admin', 'password123');
 ```
-poetry run flet run
+
+Update `db_connection.py` with your MySQL credentials.
+
+## Running the App
+
+```powershell
+cd src
+python main.py
 ```
 
-Run as a web app:
-
+Or with Flet CLI:
+```powershell
+flet run
 ```
-poetry run flet run --web
-```
 
-For more details on running the app, refer to the [Getting Started Guide](https://flet.dev/docs/getting-started/).
+## Build for Distribution
 
-## Build the app
+```powershell
+# Windows
+flet build windows -v
 
-### Android
-
-```
+# Android
 flet build apk -v
 ```
 
-For more details on building and signing `.apk` or `.aab`, refer to the [Android Packaging Guide](https://flet.dev/docs/publish/android/).
+For more build options, see the [Flet Packaging Guide](https://flet.dev/docs/publish/).
 
-### iOS
-
-```
-flet build ipa -v
-```
-
-For more details on building and signing `.ipa`, refer to the [iOS Packaging Guide](https://flet.dev/docs/publish/ios/).
-
-### macOS
-
-```
-flet build macos -v
-```
-
-For more details on building macOS package, refer to the [macOS Packaging Guide](https://flet.dev/docs/publish/macos/).
-
-### Linux
-
-```
-flet build linux -v
-```
-
-For more details on building Linux package, refer to the [Linux Packaging Guide](https://flet.dev/docs/publish/linux/).
-
-### Windows
-
-```
-flet build windows -v
-```
-
-For more details on building Windows package, refer to the [Windows Packaging Guide](https://flet.dev/docs/publish/windows/).
+## License
+Educational use for CCCS 106 coursework.

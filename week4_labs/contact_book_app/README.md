@@ -1,81 +1,82 @@
-# ContactBookApp app
+# Contact Book App – Week 4 Lab
 
-## Run the app
+## Student Information
+- **Name**: C-jay Lavapie
+- **Student ID**: 221001254
+- **Course**: CCCS 106
+- **Section**: B
 
-### uv
+## Project Overview
+A contact management application built with **Flet** and **SQLite**. Users can add, edit, delete, and search contacts. The app features circular initial avatars with a 5-color palette and a modern dark/light theme toggle.
 
-Run as a desktop app:
+## Features
+- **CRUD Operations**: Add, view, edit, and delete contacts
+- **Search**: Filter contacts in real-time
+- **Circular Avatars**: Display contact initials with deterministic colors from a 5-color palette
+- **Country Code Selection**: Dropdown with common country prefixes
+- **Email Validation**: Auto-append `@gmail.com` if no domain; validates domain format
+- **Theme Toggle**: Switch between dark and light modes
+- **SQLite Database**: Persistent local storage in `src/contacts.db`
 
+## Project Structure
 ```
-uv run flet run
+contact_book_app/
+├── src/
+│   ├── main.py        # Flet UI entry point
+│   ├── app_logic.py   # Contact display, add, edit, delete logic
+│   ├── database.py    # SQLite initialization and helpers
+│   ├── utils/         # Validation, country prefixes, avatar colors
+│   ├── contacts.db    # SQLite database (auto-created)
+│   └── assets/        # App assets
+├── pyproject.toml     # Project configuration
+└── README.md
 ```
 
-Run as a web app:
+## Installation
 
-```
-uv run flet run --web
-```
+```powershell
+cd week4_labs/contact_book_app
 
-### Poetry
+# Install with pip
+pip install flet
 
-Install dependencies from `pyproject.toml`:
-
-```
+# Or with Poetry
 poetry install
 ```
 
-Run as a desktop app:
+## Running the App
 
-```
-poetry run flet run
-```
-
-Run as a web app:
-
-```
-poetry run flet run --web
+```powershell
+cd src
+python main.py
 ```
 
-For more details on running the app, refer to the [Getting Started Guide](https://flet.dev/docs/getting-started/).
-
-## Build the app
-
-### Android
-
-```
-flet build apk -v
+Or with Flet CLI:
+```powershell
+flet run
 ```
 
-For more details on building and signing `.apk` or `.aab`, refer to the [Android Packaging Guide](https://flet.dev/docs/publish/android/).
+## Usage
+1. Enter a contact's **Name**, **Phone** (with country code), and **Email**
+2. Click **Add Contact** to save
+3. Use the search box to filter contacts
+4. Click a contact to edit or delete
+5. Toggle dark/light mode with the switch in the header
 
-### iOS
+## Build for Distribution
 
-```
-flet build ipa -v
-```
-
-For more details on building and signing `.ipa`, refer to the [iOS Packaging Guide](https://flet.dev/docs/publish/ios/).
-
-### macOS
-
-```
-flet build macos -v
-```
-
-For more details on building macOS package, refer to the [macOS Packaging Guide](https://flet.dev/docs/publish/macos/).
-
-### Linux
-
-```
-flet build linux -v
-```
-
-For more details on building Linux package, refer to the [Linux Packaging Guide](https://flet.dev/docs/publish/linux/).
-
-### Windows
-
-```
+```powershell
+# Windows
 flet build windows -v
+
+# Android
+flet build apk -v
+
+# Web
+flet run --web
 ```
 
-For more details on building Windows package, refer to the [Windows Packaging Guide](https://flet.dev/docs/publish/windows/).
+For more build options, see the [Flet Packaging Guide](https://flet.dev/docs/publish/).
+
+## License
+Educational use for CCCS 106 coursework.
